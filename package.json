@@ -5,6 +5,9 @@
   "repository": "https://github.com/SimasDei/tketz--auth.git",
   "author": "Simas <simas@simas-dei.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "ts-node-dev src/index.ts"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "ts-node-dev": "^1.1.6",
