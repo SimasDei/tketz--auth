@@ -1,9 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
-export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log('Oh no! 😡');
+import { CustomError } from '../errors';
+
+export const errorHandler = (err: Error, _: Request, res: Response) => {
+  if (err instanceof CustomError) {
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+  }
 
   res.status(400).send({
-    message: err.message,
+    errors: [{ message: err.message || 'Kaboom! 🧨💥' }],
   });
 };
