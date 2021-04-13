@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { currentUser } from '../middlewares';
+import { currentUser, requireAuth } from '../middlewares';
 
 const router = express.Router();
 
