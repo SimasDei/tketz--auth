@@ -1,6 +1,11 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+import { User } from '../models';
 import { validateRequest } from '../middlewares';
+import { BadRequestError } from '../errors';
+import { PasswordManager } from '../services';
 
 const router = express.Router();
 
@@ -11,8 +16,30 @@ router.post(
     body('password').trim().notEmpty().withMessage('Password must be present'),
     validateRequest,
   ],
-  (req: Request, res: Response) => {
-    res.send('Ahoy Sailor o/ ⛵️');
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const exisingUser = await User.findOne({ email });
+
+    if (!exisingUser) {
+      throw new BadRequestError('Invalid information provided');
+    }
+
+    const isMatch = await PasswordManager.compare(exisingUser.password, password);
+
+    if (!isMatch) {
+      throw new BadRequestError('Invalid information provided');
+    }
+
+    const userJwt = jwt.sign(
+      {
+        id: exisingUser.id,
+        email: exisingUser.email,
+      },
+      process.env.JWT_KEY!
+    );
+    req.session = { jwt: userJwt };
+
+    res.status(200).send(exisingUser);
   }
 );
 
