@@ -1,1 +1,1 @@
-tketz--auth
+tketz-auth
