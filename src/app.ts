@@ -1,10 +1,9 @@
 import express, { json } from 'express';
 import 'express-async-errors';
+import { NotFoundError, errorHandler } from '@tketz/common';
 import cookieSession from 'cookie-session';
 
-import { errorHandler } from './middlewares';
 import { currentUserRouter, signinRouter, signoutRouter, signupRouter } from './routes';
-import { NotFoundError } from './errors';
 
 const app = express();
 app.set('trust proxy', true);
