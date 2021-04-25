@@ -7,8 +7,12 @@ const init = async () => {
     throw new Error('JWT_KEY env variable must be set 🐼');
   }
 
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI env variable must be set 🐼');
+  }
+
   try {
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
